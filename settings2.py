@@ -1,0 +1,11 @@
+mapFile = 'input_map_csv.csv'
+backgroundImg = "input_map.png"
+outputImg = "output_mtg_map.png"
+outputImgBgWhite = "output_mtg_map_bg_white.png"
+cellNum = 1
+pixelSize = 200
+mainColor = (255, 255, 255)
+lineColor = (0, 0, 0)
+csvFlg = True
+noCsvXMax = 12
+noCsvYMax = 8
