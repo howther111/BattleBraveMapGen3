@@ -189,7 +189,10 @@ def genmap(xsquare=9, ysquare=6, csv_flg=1, highmount=0.5, forest=0.3, land=-0.2
                 outputMapArray[y][x] = 0
                 build_seed = random.random()
                 if build_seed <= shogai_build:
-                    outputMinText = outputMinText + "▲,"
+                    if csv_flg == 1:
+                        outputMinText = outputMinText + "▲,"
+                    elif csv_flg == 0:
+                        outputMinText = outputMinText + "　,"
                     build_num = random.randint(3,5)
                     for i in range(build_num):
                         buildsizemin = 15
@@ -205,7 +208,10 @@ def genmap(xsquare=9, ysquare=6, csv_flg=1, highmount=0.5, forest=0.3, land=-0.2
                         buildyend = buildy + (buildsize / 2)
                         draw.rectangle((buildxstart, buildystart, buildxend, buildyend), fill=build_col1, outline=build_col2)
                 elif build_seed <= shahei_build:
-                    outputMinText = outputMinText + "▼,"
+                    if csv_flg == 1:
+                        outputMinText = outputMinText + "▼,"
+                    elif csv_flg == 0:
+                        outputMinText = outputMinText + "　,"
                     build_num = random.randint(1, 3)
                     for i in range(build_num):
                         buildsizemin = 10
