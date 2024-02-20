@@ -55,7 +55,7 @@ with open('input_map_csv.csv') as f:
 
     outputcsv = l
 
-with open('input_map_csv.csv', 'w') as f:
+with open('input_map_csv.csv', 'w', newline="") as f:
     writer = csv.writer(f)
     writer.writerows(outputcsv)
 
