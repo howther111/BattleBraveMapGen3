@@ -20,8 +20,30 @@ def edit(start_xpos=1, start_ypos=1, start_xwidth=2, start_ywidth=2,
             for x in range(start_ywidth):
                 l[start_ypos_minus + y][start_xpos_minus + x] = input_text
 
+        lastsplitrow = ""
+        print("\n-map start-\n")
         for row in l:
-            print(row)
+            newrow = "｜"
+            charnum = 0
+            for char in row:
+                char.replace("\u3000", "  ")
+                newrow = newrow + char + "｜"
+                charnum = charnum + 1
+
+            charnum = charnum
+
+            splitrow = ""
+            for i in range(charnum):
+                splitrow = splitrow + "＋―"
+            splitrow = splitrow + "＋"
+            lastsplitrow = splitrow
+
+            print(splitrow)
+            print(newrow)
+
+        print(lastsplitrow)
+
+        print("\n-map end-\n")
 
         outputcsv = l
 
