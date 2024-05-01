@@ -4,6 +4,7 @@ import tkinter.messagebox as messagebox
 import textPos
 import sys
 import metaga_mapchip_list
+import csv
 
 text_xpos = 1
 text_ypos = 1
@@ -66,6 +67,41 @@ def editStart(text_text_xpos, text_text_ypos, text_text_xwidth, text_text_ywidth
 
 if __name__ == "__main__":
     print("EditStart")
+
+    try:
+        with open('input_map_csv.csv') as f:
+            reader = csv.reader(f)
+            l = [row for row in reader]
+
+            lastsplitrow = ""
+            print("\n-map start-\n")
+            for row in l:
+                newrow = "｜"
+                charnum = 0
+                for char in row:
+                    char.replace("\u3000", "  ")
+                    newrow = newrow + char + "|"
+                    charnum = charnum + 1
+
+                charnum = charnum
+
+                splitrow = "---"
+                for i in range(charnum):
+                    splitrow = splitrow + "---"
+                splitrow = splitrow
+                lastsplitrow = splitrow
+
+                print(splitrow)
+                print(newrow)
+
+            print(lastsplitrow)
+
+            print("\n-map end-\n")
+
+            outputcsv = l
+    except:
+        print("file read error")
+
     try:
         root = Tk()
         # ----------- ①Window作成 ----------- #

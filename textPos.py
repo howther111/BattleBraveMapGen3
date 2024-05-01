@@ -8,7 +8,8 @@ def edit(start_xpos=1, start_ypos=1, start_xwidth=2, start_ywidth=2,
         reader = csv.reader(f)
         l = [row for row in reader]
         for row in reader:
-            print(row)
+            #print(row)
+            pass
 
         #xmax = len(l[0])
         #ymax = len(l)
@@ -27,15 +28,15 @@ def edit(start_xpos=1, start_ypos=1, start_xwidth=2, start_ywidth=2,
             charnum = 0
             for char in row:
                 char.replace("\u3000", "  ")
-                newrow = newrow + char + "｜"
+                newrow = newrow + char + "|"
                 charnum = charnum + 1
 
             charnum = charnum
 
-            splitrow = ""
+            splitrow = "---"
             for i in range(charnum):
-                splitrow = splitrow + "＋―"
-            splitrow = splitrow + "＋"
+                splitrow = splitrow + "---"
+            splitrow = splitrow
             lastsplitrow = splitrow
 
             print(splitrow)
