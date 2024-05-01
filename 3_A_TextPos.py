@@ -1,7 +1,9 @@
+import tkinter.ttk
 from tkinter import *
 import tkinter.messagebox as messagebox
 import textPos
 import sys
+import metaga_mapchip_list
 
 text_xpos = 1
 text_ypos = 1
@@ -186,18 +188,20 @@ if __name__ == "__main__":
         label_13a.pack()
 
         # == Entry(frame14) == #
-        entry_14b = Entry(frame14, width=14)
-        entry_14b.insert(0, str(input_text_default))
+        mapchip_list = metaga_mapchip_list.mapchip_list
+        combobox_14b = tkinter.ttk.Combobox(frame14, font=('System', 14), values=mapchip_list, justify="center", width=14)
+        #entry_14b = Entry(frame14, width=14)
+        combobox_14b.insert(0, str(input_text_default))
         input_text = StringVar()
         button_14b = Button(frame14, text='反映',
-                            command=lambda: [input_text.set(entry_14b.get())])
+                            command=lambda: [input_text.set(combobox_14b.get())])
         label_14b = Label(frame14, textvariable=input_text, font=('System', 14))
 
-        entry_14b.pack()
+        combobox_14b.pack()
 
         button_16a = Button(frame16, text='生成', command=lambda: [editStart(entry_2b.get(), entry_5b.get(),
                                                                              entry_8b.get(), entry_11b.get(),
-                                                                             entry_14b.get())])
+                                                                             combobox_14b.get())])
         button_16a.pack(padx=5, pady=10, expand=True)
 
         button_17a = Button(frame17, text='終了', command=lambda: sys.exit())
