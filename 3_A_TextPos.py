@@ -75,8 +75,21 @@ if __name__ == "__main__":
 
             lastsplitrow = ""
             print("\n-map start-\n")
+            startrow = "  |"
+            columnnum = 0
+            for text in l[0]:
+                columnnum = columnnum + 1
+                columnnumtext = str(columnnum).zfill(2)
+                startrow = startrow + columnnumtext + "|"
+            startrow = startrow + "  "
+            print(startrow)
+
+            rownum = 0
+
             for row in l:
-                newrow = "｜"
+                rownum = rownum + 1
+                rownumtext = str(rownum).zfill(2)
+                newrow = rownumtext + "|"
                 charnum = 0
                 for char in row:
                     char.replace("\u3000", "  ")

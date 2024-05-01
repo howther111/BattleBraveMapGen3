@@ -7,12 +7,6 @@ def edit(start_xpos=1, start_ypos=1, start_xwidth=2, start_ywidth=2,
     with open('input_map_csv.csv') as f:
         reader = csv.reader(f)
         l = [row for row in reader]
-        for row in reader:
-            #print(row)
-            pass
-
-        #xmax = len(l[0])
-        #ymax = len(l)
 
         start_xpos_minus = start_xpos - 1
         start_ypos_minus = start_ypos - 1
@@ -23,8 +17,21 @@ def edit(start_xpos=1, start_ypos=1, start_xwidth=2, start_ywidth=2,
 
         lastsplitrow = ""
         print("\n-map start-\n")
+        startrow = "  |"
+        columnnum = 0
+        for text in l[0]:
+            columnnum = columnnum + 1
+            columnnumtext = str(columnnum).zfill(2)
+            startrow = startrow + columnnumtext + "|"
+        startrow = startrow + "  "
+        print(startrow)
+
+        rownum = 0
+
         for row in l:
-            newrow = "｜"
+            rownum = rownum + 1
+            rownumtext = str(rownum).zfill(2)
+            newrow = rownumtext + "|"
             charnum = 0
             for char in row:
                 char.replace("\u3000", "  ")
