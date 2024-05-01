@@ -48,14 +48,14 @@ def editStart(text_text_xpos, text_text_ypos, text_text_xwidth, text_text_ywidth
     if text_text_xwidth.isdecimal() or text_text_xwidth == "":
         text_xwidth = int(text_text_xwidth)
     else:
-        messagebox.showinfo('エラー', '「初期配置横幅」には数値を入力してください。')
+        messagebox.showinfo('エラー', '「テキスト横幅」には数値を入力してください。')
         errFlg = True
 
     text_ywidth = text_text_ywidth
     if text_text_ywidth.isdecimal() or text_text_ywidth == "":
         text_ywidth = int(text_text_ywidth)
     else:
-        messagebox.showinfo('エラー', '「初期配置縦幅」には数値を入力してください。')
+        messagebox.showinfo('エラー', '「テキスト縦幅」には数値を入力してください。')
         errFlg = True
 
     input_text = text_input_text
@@ -118,7 +118,7 @@ if __name__ == "__main__":
     try:
         root = Tk()
         # ----------- ①Window作成 ----------- #
-        root.title('初期配置設定')  # 画面タイトル設定
+        root.title('地形テキスト設定')  # 画面タイトル設定
         root.geometry('300x300')  # 画面サイズ設定
         root.resizable(False, False)  # リサイズ不可に設定
 
