@@ -13,8 +13,8 @@ land = -20 #以上は平地
 sand = -30 #以上は砂地
 normalsea = -50 #以上は通常水地
 deepsea = -100 #以上は深水
-shahei_build = 20 #遮蔽建物の割合
-shogai_build = 5 #障害建物の割合
+shahei_build = 4 #遮蔽建物の割合
+shogai_build = 1 #障害建物の割合
 
 def is_num(a):
     try:
