@@ -115,19 +115,7 @@ def genmap(xsquare=9, ysquare=6, csv_flg=1, highmount=0.5, forest=0.3, land=-0.2
             g = rgb[1]
             b = rgb[2]
             gray = int((r + g + b) / 3)
-            if b > r and b > g and b <= 191:
-                #tile = pixelCreate.pixel_create(xmax=tilepixel, ymax=tilepixel, color1=deepsea_col1, color2=deepsea_col2,
-                #                                rate=0.2)
-                #canvas.paste(tile, (x * tilepixel, y * tilepixel))
-                outputText = outputText + "深,"
-                #outputMapBigArray[y][x] = -2
-            elif b > r and b > g and b > 191:
-                #tile = pixelCreate.pixel_create(xmax=tilepixel, ymax=tilepixel, color1=sea_col1, color2=sea_col2,
-                #                                rate=0.2)
-                #canvas.paste(tile, (x * tilepixel, y * tilepixel))
-                outputText = outputText + "水,"
-                #outputMapBigArray[y][x] = -1
-            elif (gray <= 31):
+            if (gray <= 31):
                 # tile = pixelCreate.pixel_create(xmax=tilepixel, ymax=tilepixel, color1=sand_col1, color2=sand_col2,
                 #                                rate=0.2)
                 # canvas.paste(tile, (x * tilepixel, y * tilepixel))
@@ -136,30 +124,12 @@ def genmap(xsquare=9, ysquare=6, csv_flg=1, highmount=0.5, forest=0.3, land=-0.2
                 #tile = pixelCreate.pixel_create(xmax=tilepixel, ymax=tilepixel, color1=sand_col1, color2=sand_col2,
                 #                                rate=0.2)
                 #canvas.paste(tile, (x * tilepixel, y * tilepixel))
-                outputText = outputText + "▲,"
+                outputText = outputText + "＝,"
             elif (gray <= 127):
                 #tile = pixelCreate.pixel_create(xmax=tilepixel, ymax=tilepixel, color1=forest_col1, color2=forest_col2,
                 #                                rate=0.2)
                 #canvas.paste(tile, (x * tilepixel, y * tilepixel))
-                outputText = outputText + "▼,"
-            elif (gray <= 159):
-                # tile = pixelCreate.pixel_create(xmax=tilepixel, ymax=tilepixel, color1=forest_col1, color2=forest_col2,
-                #                                rate=0.2)
-                # canvas.paste(tile, (x * tilepixel, y * tilepixel))
-                outputText = outputText + "▽,"
-                #outputMapBigArray[y][x] = 1
-            elif (gray >= 252):
-                #tile = pixelCreate.pixel_create(xmax=tilepixel, ymax=tilepixel, color1=forest_col1, color2=forest_col2,
-                #                                rate=0.2)
-                #canvas.paste(tile, (x * tilepixel, y * tilepixel))
-                outputText = outputText + "☒,"
-                #outputMapBigArray[y][x] = 1
-            elif b < r and b < g and g > 191 and r > 191 and b > 127:
-                #tile = pixelCreate.pixel_create(xmax=tilepixel, ymax=tilepixel, color1=forest_col1, color2=forest_col2,
-                #                                rate=0.2)
-                #canvas.paste(tile, (x * tilepixel, y * tilepixel))
-                outputText = outputText + "／,"
-                #outputMapBigArray[y][x] = 1
+                outputText = outputText + "＃,"
             else:
                 #tile = pixelCreate.pixel_create(xmax=tilepixel, ymax=tilepixel, color1=mount_col1, color2=mount_col2,
                 #                                rate=0.2)
