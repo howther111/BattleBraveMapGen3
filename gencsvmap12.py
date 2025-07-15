@@ -137,12 +137,12 @@ def genmap(xsquare=9, ysquare=6, csv_flg=1, highmount=0.5, forest=0.3, land=-0.2
                 #                                rate=0.2)
                 #canvas.paste(tile, (x * tilepixel, y * tilepixel))
                 outputText = outputText + "▲,"
-            elif (gray <= 127):
+            elif (gray <= 95):
                 #tile = pixelCreate.pixel_create(xmax=tilepixel, ymax=tilepixel, color1=forest_col1, color2=forest_col2,
                 #                                rate=0.2)
                 #canvas.paste(tile, (x * tilepixel, y * tilepixel))
                 outputText = outputText + "▼,"
-            elif (gray <= 159):
+            elif (gray <= 127):
                 # tile = pixelCreate.pixel_create(xmax=tilepixel, ymax=tilepixel, color1=forest_col1, color2=forest_col2,
                 #                                rate=0.2)
                 # canvas.paste(tile, (x * tilepixel, y * tilepixel))
@@ -152,7 +152,7 @@ def genmap(xsquare=9, ysquare=6, csv_flg=1, highmount=0.5, forest=0.3, land=-0.2
                 #tile = pixelCreate.pixel_create(xmax=tilepixel, ymax=tilepixel, color1=forest_col1, color2=forest_col2,
                 #                                rate=0.2)
                 #canvas.paste(tile, (x * tilepixel, y * tilepixel))
-                outputText = outputText + "☒,"
+                outputText = outputText + "雪,"
                 #outputMapBigArray[y][x] = 1
             elif b < r and b < g and g > 191 and r > 191 and b > 127:
                 #tile = pixelCreate.pixel_create(xmax=tilepixel, ymax=tilepixel, color1=forest_col1, color2=forest_col2,

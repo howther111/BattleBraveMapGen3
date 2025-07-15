@@ -124,12 +124,12 @@ def genmap(xsquare=9, ysquare=6, csv_flg=1, highmount=0.5, forest=0.3, land=-0.2
                 #tile = pixelCreate.pixel_create(xmax=tilepixel, ymax=tilepixel, color1=sand_col1, color2=sand_col2,
                 #                                rate=0.2)
                 #canvas.paste(tile, (x * tilepixel, y * tilepixel))
-                outputText = outputText + "＝,"
-            elif (gray <= 127):
+                outputText = outputText + "＃,"
+            elif (gray <= 95):
                 #tile = pixelCreate.pixel_create(xmax=tilepixel, ymax=tilepixel, color1=forest_col1, color2=forest_col2,
                 #                                rate=0.2)
                 #canvas.paste(tile, (x * tilepixel, y * tilepixel))
-                outputText = outputText + "＃,"
+                outputText = outputText + "＝,"
             else:
                 #tile = pixelCreate.pixel_create(xmax=tilepixel, ymax=tilepixel, color1=mount_col1, color2=mount_col2,
                 #                                rate=0.2)
