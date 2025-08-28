@@ -58,6 +58,9 @@ def genmap(xsquare=9, ysquare=6, csv_flg=1, highmount=0.5, forest=0.3, land=-0.2
     tilepixel = 1
     squarepixel = int(pixel / tilepixel)
     fieldFlg = True
+    img2 = Image.new("RGB", img.size, (255, 255, 255))
+    img2.paste(img, mask=img.split()[3])
+    draw = ImageDraw.Draw(img2)
 
     z = 0
     fieldtile_y = 0
@@ -82,8 +85,8 @@ def genmap(xsquare=9, ysquare=6, csv_flg=1, highmount=0.5, forest=0.3, land=-0.2
     #    pery += perlin(r)  # meshgridの形(2,N,N)で渡す
         #print(pery[1])
 
-    mount_col1 = "#8B4513"
-    mount_col2 = "#B8860B"
+    mount_col1 = "#B8860B"
+    mount_col2 = "#8B4513"
     forest_col1 = "#006400"
     forest_col2 = "#228B22"
     land1_col1 = "#7CFC00"
@@ -96,6 +99,8 @@ def genmap(xsquare=9, ysquare=6, csv_flg=1, highmount=0.5, forest=0.3, land=-0.2
     deepsea_col2 = "#0000cd"
     build_col1 = "#d3d3d3"
     build_col2 = "#696969"
+    space_col1 = "#000080"
+    space_col2 = "#FFFF00"
 
     #ymaxtap = pery.shape
     #xmaxtap = pery[0].shape
@@ -115,25 +120,70 @@ def genmap(xsquare=9, ysquare=6, csv_flg=1, highmount=0.5, forest=0.3, land=-0.2
             g = rgb[1]
             b = rgb[2]
             gray = int((r + g + b) / 3)
-            if (gray <= 31):
-                # tile = pixelCreate.pixel_create(xmax=tilepixel, ymax=tilepixel, color1=sand_col1, color2=sand_col2,
-                #                                rate=0.2)
-                # canvas.paste(tile, (x * tilepixel, y * tilepixel))
+            if (gray <= 160):
+                tile = pixelCreate.pixel_create(xmax=squarepixel, ymax=squarepixel, color1=space_col1, color2=space_col2,
+                                               rate=0.01)
+                img2.paste(tile, (x * squarepixel, y * squarepixel))
+                build_num = random.randint(3, 5)
+                for i in range(build_num):
+                    buildsizemin = 13
+                    buildsizemax = 39
+                    buildposmin = buildsizemax
+                    buildposmax = pixel - buildsizemax
+                    buildsize = random.randint(buildsizemin, buildsizemax)
+                    buildx = random.randint(buildposmin, buildposmax) + (x * pixel)
+                    buildy = random.randint(buildposmin, buildposmax) + (y * pixel)
+                    buildxstart = buildx - (buildsize / 2)
+                    buildxend = buildx + (buildsize / 2)
+                    buildystart = buildy - (buildsize / 2)
+                    buildyend = buildy + (buildsize / 2)
+                    draw.ellipse((buildxstart, buildystart, buildxend, buildyend), fill=mount_col1,
+                                   outline=mount_col2)
                 outputText = outputText + "■,"
-            elif (gray <= 63):
-                #tile = pixelCreate.pixel_create(xmax=tilepixel, ymax=tilepixel, color1=sand_col1, color2=sand_col2,
-                #                                rate=0.2)
-                #canvas.paste(tile, (x * tilepixel, y * tilepixel))
+            elif (gray <= 192):
+                tile = pixelCreate.pixel_create(xmax=squarepixel, ymax=squarepixel, color1=space_col1, color2=space_col2,
+                                                rate=0.01)
+                img2.paste(tile, (x * squarepixel, y * squarepixel))
+                build_num = random.randint(2, 5)
+                for i in range(build_num):
+                    buildsizemin = 10
+                    buildsizemax = 30
+                    buildposmin = buildsizemax
+                    buildposmax = pixel - buildsizemax
+                    buildsize = random.randint(buildsizemin, buildsizemax)
+                    buildx = random.randint(buildposmin, buildposmax) + (x * pixel)
+                    buildy = random.randint(buildposmin, buildposmax) + (y * pixel)
+                    buildxstart = buildx - (buildsize / 2)
+                    buildxend = buildx + (buildsize / 2)
+                    buildystart = buildy - (buildsize / 2)
+                    buildyend = buildy + (buildsize / 2)
+                    draw.ellipse((buildxstart, buildystart, buildxend, buildyend), fill=mount_col1,
+                                outline=mount_col2)
                 outputText = outputText + "＃,"
-            elif (gray <= 95):
-                #tile = pixelCreate.pixel_create(xmax=tilepixel, ymax=tilepixel, color1=forest_col1, color2=forest_col2,
-                #                                rate=0.2)
-                #canvas.paste(tile, (x * tilepixel, y * tilepixel))
+            elif (gray <= 224):
+                tile = pixelCreate.pixel_create(xmax=squarepixel, ymax=squarepixel, color1=space_col1, color2=space_col2,
+                                                rate=0.01)
+                img2.paste(tile, (x * squarepixel, y * squarepixel))
+                build_num = random.randint(2, 5)
+                for i in range(build_num):
+                    buildsizemin = 7
+                    buildsizemax = 21
+                    buildposmin = buildsizemax
+                    buildposmax = pixel - buildsizemax
+                    buildsize = random.randint(buildsizemin, buildsizemax)
+                    buildx = random.randint(buildposmin, buildposmax) + (x * pixel)
+                    buildy = random.randint(buildposmin, buildposmax) + (y * pixel)
+                    buildxstart = buildx - (buildsize / 2)
+                    buildxend = buildx + (buildsize / 2)
+                    buildystart = buildy - (buildsize / 2)
+                    buildyend = buildy + (buildsize / 2)
+                    draw.ellipse((buildxstart, buildystart, buildxend, buildyend), fill=mount_col1,
+                                outline=mount_col2)
                 outputText = outputText + "＝,"
             else:
-                #tile = pixelCreate.pixel_create(xmax=tilepixel, ymax=tilepixel, color1=mount_col1, color2=mount_col2,
-                #                                rate=0.2)
-                #canvas.paste(tile, (x * tilepixel, y * tilepixel))
+                tile = pixelCreate.pixel_create(xmax=squarepixel, ymax=squarepixel, color1=space_col1, color2=space_col2,
+                                                rate=0.01)
+                img2.paste(tile, (x * squarepixel, y * squarepixel))
                 outputText = outputText + "　,"
                 #outputMapBigArray[y][x] = 2
 
@@ -150,7 +200,7 @@ def genmap(xsquare=9, ysquare=6, csv_flg=1, highmount=0.5, forest=0.3, land=-0.2
 
     #draw.point((i, j), color2)
 
-    img.save("output_map.png")
+    img2.save("output_map.png")
 
     return
 
