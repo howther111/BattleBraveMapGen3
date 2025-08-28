@@ -120,7 +120,7 @@ def genmap(xsquare=9, ysquare=6, csv_flg=1, highmount=0.5, forest=0.3, land=-0.2
             g = rgb[1]
             b = rgb[2]
             gray = int((r + g + b) / 3)
-            if (gray <= 160):
+            if (gray <= 64):
                 tile = pixelCreate.pixel_create(xmax=squarepixel, ymax=squarepixel, color1=space_col1, color2=space_col2,
                                                rate=0.01)
                 img2.paste(tile, (x * squarepixel, y * squarepixel))
@@ -140,7 +140,7 @@ def genmap(xsquare=9, ysquare=6, csv_flg=1, highmount=0.5, forest=0.3, land=-0.2
                     draw.ellipse((buildxstart, buildystart, buildxend, buildyend), fill=mount_col1,
                                    outline=mount_col2)
                 outputText = outputText + "■,"
-            elif (gray <= 192):
+            elif (gray <= 128):
                 tile = pixelCreate.pixel_create(xmax=squarepixel, ymax=squarepixel, color1=space_col1, color2=space_col2,
                                                 rate=0.01)
                 img2.paste(tile, (x * squarepixel, y * squarepixel))
@@ -160,7 +160,7 @@ def genmap(xsquare=9, ysquare=6, csv_flg=1, highmount=0.5, forest=0.3, land=-0.2
                     draw.ellipse((buildxstart, buildystart, buildxend, buildyend), fill=mount_col1,
                                 outline=mount_col2)
                 outputText = outputText + "＃,"
-            elif (gray <= 224):
+            elif (gray <= 192):
                 tile = pixelCreate.pixel_create(xmax=squarepixel, ymax=squarepixel, color1=space_col1, color2=space_col2,
                                                 rate=0.01)
                 img2.paste(tile, (x * squarepixel, y * squarepixel))
