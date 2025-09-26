@@ -129,8 +129,8 @@ class Program:
         button_17a = Button(frame5, text='終了', command=lambda: sys.exit())
         button_17a.pack(padx=5, pady=10, expand=True)
 
-        canvasx = min(len(l[0]) * 25, 1800)
-        canvasy = min(len(l) * 25, 1000)
+        canvasx = min((len(l[0])+1) * 25, 1800)
+        canvasy = min((len(l)+1) * 25, 1000)
 
         canvas1.title('キャンバス')  # 画面タイトル設定
         canvas1.geometry(str(canvasx) + 'x' + str(canvasy))  # 画面サイズ設定
@@ -218,10 +218,10 @@ class Program:
         input_text = text_input_text
 
         if not errFlg:
-            textPos.edit(text_xpos, text_ypos, text_xwidth, text_ywidth,
-                         input_text)
             x = int(text_text_xpos) - 1
             y = int(text_text_ypos) - 1
+            textPos.edit(x, y, text_xwidth, text_ywidth,
+                         input_text)
             self.canvas.button_frame[y][x]["text"] = text_input_text
 
 
