@@ -1,7 +1,7 @@
 import csv
 from PIL import Image
 import os
-import metaga_mapchip_list
+import tex_metaga_mapchip_list
 
 # ==== 設定 ====
 CSV_FILE = "input_map_csv.csv"       # 入力 CSV（Shift_JIS）
@@ -10,18 +10,18 @@ OUTPUT_FILE = "input_map.png"        # 出力 PNG
 TILE_SIZE = (200, 200)               # 各タイル画像サイズ（200×200）
 
 # 記号 → テクスチャファイル名 の対応表
-mapchip_list = metaga_mapchip_list.mapchip_list
+mapchip_list = tex_metaga_mapchip_list.mapchip_list
 TILE_MAP = {}
 
 for key in mapchip_list:
     if key == "　":  # 全角スペース
-        TILE_MAP[key] = "　.png"
+        TILE_MAP[key] = "＿.png"
     else:
         TILE_MAP[key] = f"{key}.png"
 
 # 空文字列も空白扱いにする
-TILE_MAP[""] = "　.png"
-TILE_MAP[" "] = "　.png"
+TILE_MAP[""] = "＿.png"
+TILE_MAP[" "] = "＿.png"
 
 # ==== CSV を読み込む（Shift_JIS） ====
 map_data = []
@@ -46,15 +46,16 @@ for y, row in enumerate(map_data):
     for x, cell in enumerate(row):
 
         # 空文字対策
-        if cell == "" or cell == " ":
-            cell = "　"
+        if cell == "" or cell == " " or cell == "＿":
+            cell = "＿"
 
         # 未登録の記号は空白扱いにする
-        filename = TILE_MAP.get(cell, TILE_MAP["　"])
+        filename = TILE_MAP.get(cell, TILE_MAP["＿"])
         texture_path = os.path.join(TEXTURE_DIR, filename)
 
         if not os.path.exists(texture_path):
-            texture_path = os.path.join(TEXTURE_DIR, "　.png")
+            filename = TILE_MAP.get(cell, TILE_MAP["＿"])
+            texture_path = os.path.join(TEXTURE_DIR, filename)
             #raise FileNotFoundError(f"テクスチャ画像が見つかりません: {texture_path}")
 
         tile_img = Image.open(texture_path).convert("RGBA")
