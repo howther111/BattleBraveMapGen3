@@ -6,6 +6,7 @@ outputImgBgTranspalent = "output_mtg_map_bg_transpalent.png"
 cellNum = 1
 pixelSize = 200
 mainColor = (255, 255, 255, 1)
+headerColor = (255, 255, 255, 1)
 lineColor = (0, 0, 0)
 csvFlg = True
 noCsvXMax = 12

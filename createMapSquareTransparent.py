@@ -44,9 +44,11 @@ if __name__ == '__main__':
     fontsize = (settings.pixelSize // 2) * settings.cellNum
 
     im = Image.new('RGBA', (xSize, ySize), settings.mainColor)
-    #backgrouwnIm = Image.open(settings.backgroundImg)
-    #im.paste(backgrouwnIm, (midashiSize, midashiSize))
+    backgrouwnIm = Image.open(settings.backgroundImg)
+    im.paste(backgrouwnIm, (midashiSize, midashiSize))
     draw = ImageDraw.Draw(im)
+    draw.rectangle((0, 0, settings.pixelSize, ySize), fill=settings.headerColor)
+    draw.rectangle((0, 0, xSize, settings.pixelSize), fill=settings.headerColor)
     draw.line((0, 0, 0, ySize), fill=settings.lineColor, width=lineWidth)
     draw.line((0, 0, xSize, 0), fill=settings.lineColor, width=lineWidth)
     font = ImageFont.truetype('C:/Windows/Fonts/meiryo.ttc', fontsize)
@@ -68,8 +70,7 @@ if __name__ == '__main__':
         w = draw.textlength("00", font=font)
         # print(w)
         # print(h)
-        draw.text((xPoint - (w / 2), yPoint - (w / 2) - (4 * settings.cellNum)), str(num), fill=settings.lineColor,
-                  font=font)
+        draw.text((xPoint - (w / 2), yPoint - (w / 2) - (4 * settings.cellNum)), str(num), fill=settings.lineColor, font=font)
         num = num + 1
 
     num = 1
@@ -86,26 +87,32 @@ if __name__ == '__main__':
         else:
             messagebox.showinfo('エラー', '縦スクウェアが上限（675）を超えています')
             sys.exit()
-        # alphaNum = numToAlpha.numToAlphaOne(num)
+        #alphaNum = numToAlpha.numToAlphaOne(num)
         w = draw.textlength(alphaNum, font=font)
-        draw.text((xPoint - (w / 2), yPoint - (w / 2) - (4 * settings.cellNum)), alphaNum, fill=settings.lineColor,
-                  font=font)
+        draw.text((xPoint - (w / 2), yPoint - (w / 2) - (4 * settings.cellNum)), alphaNum, fill=settings.lineColor, font=font)
         num = num + 1
 
     # 地形読込
     if csvFlg:
         for y in range(yMax):
             for x in range(xMax):
-                cellFontsize = cellSize
-                font = ImageFont.truetype('C:/Windows/Fonts/meiryo.ttc', cellFontsize)
                 mapText = l[y][x]
+                mapTextLen = len(mapText)
+                if mapTextLen > 0:
+                    cellFontsize = int(cellSize / mapTextLen)
+                else:
+                    cellFontsize = cellSize
+                font = ImageFont.truetype('C:/Windows/Fonts/meiryo.ttc', cellFontsize)
+
                 w = draw.textlength(mapText, font=font)
                 xPoint = midashiSize + (cellSize / 2) + (x * cellSize)
                 yPoint = midashiSize + (cellSize / 2) + (y * cellSize)
                 xPoint2 = xPoint - (w / 2)
-                yPoint2 = yPoint - (w / 2) - (30 * settings.cellNum)
-                draw.text((xPoint - (w / 2), yPoint - (w / 2) - (30 * settings.cellNum)), mapText,
+                yPoint2 = yPoint - (w / 2)
+
+                draw.text((xPoint - (w / 2), yPoint - (w / 2)), mapText,
                           fill=settings.lineColor, font=font)
 
-    im.save(settings.outputImgBgTranspalent)
+
+    im.save(settings.outputImg)
     print("Program End")
