@@ -44,6 +44,8 @@ if __name__ == '__main__':
     fontsize = (settings.pixelSize // 2) * settings.cellNum
 
     im = Image.new('RGBA', (xSize, ySize), settings.mainColor)
+    backgrouwnIm = Image.open(settings.backgroundImg)
+    im.paste(backgrouwnIm, (midashiSize, midashiSize))
     draw = ImageDraw.Draw(im)
     draw.rectangle((0, 0, settings.pixelSize, ySize), fill=settings.headerColor)
     draw.rectangle((0, 0, xSize, settings.pixelSize), fill=settings.headerColor)
