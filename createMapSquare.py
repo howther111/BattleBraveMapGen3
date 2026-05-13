@@ -97,12 +97,18 @@ if __name__ == '__main__':
                 cellFontsize = cellSize
                 font = ImageFont.truetype('C:/Windows/Fonts/meiryo.ttc', cellFontsize)
                 mapText = l[y][x]
+                mapTextLen = len(mapText)
+                if mapTextLen > 0:
+                    cellFontsize = int(cellSize / mapTextLen)
+                else:
+                    cellFontsize = cellSize
+                font = ImageFont.truetype('C:/Windows/Fonts/meiryo.ttc', cellFontsize)
                 w = draw.textlength(mapText, font=font)
                 xPoint = midashiSize + (cellSize / 2) + (x * cellSize)
                 yPoint = midashiSize + (cellSize / 2) + (y * cellSize)
                 xPoint2 = xPoint - (w / 2)
                 yPoint2 = yPoint - (w / 2) - (30 * settings.cellNum)
-                draw.text((xPoint - (w / 2), yPoint - (w / 2) - (30 * settings.cellNum)), mapText,
+                draw.text((xPoint2, yPoint2), mapText,
                           fill=settings.lineColor, font=font)
 
     im.save(settings.outputImg)

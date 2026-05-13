@@ -1,5 +1,5 @@
 from PIL import Image, ImageDraw, ImageFont
-import settingst as settings
+import settingsbt as settings
 import numToAlpha
 import csv
 import sys
