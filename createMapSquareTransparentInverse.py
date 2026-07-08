@@ -62,7 +62,7 @@ if __name__ == '__main__':
 
     # 文字描画
     num = 1
-    for x in range(xMax):
+    for y in range(yMax):
         xPoint = (midashiSize / 2)
         yPoint = midashiSize + (cellSize / 2) + (y * cellSize)
         alphaNum = ""
@@ -82,7 +82,7 @@ if __name__ == '__main__':
         num = num + 1
 
     num = 1
-    for y in range(yMax):
+    for x in range(xMax):
         xPoint = midashiSize + (cellSize / 2) + (x * cellSize)
         yPoint = midashiSize / 2
         w = draw.textlength("00", font=font)

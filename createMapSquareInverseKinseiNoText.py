@@ -62,7 +62,7 @@ if __name__ == '__main__':
 
     # 文字描画
     num = 1
-    for y in range(yMax):
+    for y in range(xMax):
         xPoint = (midashiSize / 2)
         yPoint = midashiSize + (cellSize / 2) + (y * cellSize)
         alphaNum = ""
@@ -81,8 +81,8 @@ if __name__ == '__main__':
                   font=font)
         num = num + 1
 
-    num = 1
-    for x in range(xMax):
+    num = 0
+    for x in range(yMax):
         xPoint = midashiSize + (cellSize / 2) + (x * cellSize)
         yPoint = midashiSize / 2
         w = draw.textlength("00", font=font)
@@ -93,25 +93,6 @@ if __name__ == '__main__':
         num = num + 1
 
     # 地形読込
-    if csvFlg:
-        for y in range(yMax):
-            for x in range(xMax):
-                cellFontsize = cellSize
-                font = ImageFont.truetype('C:/Windows/Fonts/meiryo.ttc', cellFontsize)
-                mapText = l[y][x]
-                mapTextLen = len(mapText)
-                if mapTextLen > 0:
-                    cellFontsize = int(cellSize / mapTextLen)
-                else:
-                    cellFontsize = cellSize
-                font = ImageFont.truetype('C:/Windows/Fonts/meiryo.ttc', cellFontsize)
-                w = draw.textlength(mapText, font=font)
-                xPoint = midashiSize + (cellSize / 2) + (x * cellSize)
-                yPoint = midashiSize + (cellSize / 2) + (y * cellSize)
-                xPoint2 = xPoint - (w / 2)
-                yPoint2 = yPoint - (w / 2) - (30 * settings.cellNum)
-                draw.text((xPoint2, yPoint2), mapText,
-                          fill=settings.lineColor, font=font)
 
     im.save(settings.outputImg)
     print("Program End")
