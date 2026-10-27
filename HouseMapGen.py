@@ -152,11 +152,11 @@ class Generator:
                     break
         return rooms
 
-    def render(self, grid=False):
+    def render(self, grid=False, floor_color=FLOOR, wall_color=WALL_COLOR):
         im = Image.new('RGBA', (self.w * S, self.h * S), (0, 0, 0, 0))
         d = ImageDraw.Draw(im)
         for x, y in self.cells:
-            d.rectangle((x*S, y*S, (x+1)*S-1, (y+1)*S-1), fill=FLOOR)
+            d.rectangle((x*S, y*S, (x+1)*S-1, (y+1)*S-1), fill=floor_color)
         room_of = {p: i for i, room in enumerate(self.rooms) for p in room}
 
         # 壁は各格子境界を一度だけ描く。接合部は端を20px延長し、
@@ -192,10 +192,10 @@ class Generator:
         for orient, gx, gy, exterior in edges:
             if orient == 'v':
                 px, py = gx*S, gy*S
-                wd.rectangle((px-half, py-half, px+half-1, py+S+half-1), fill=WALL_COLOR)
+                wd.rectangle((px-half, py-half, px+half-1, py+S+half-1), fill=wall_color)
             else:
                 px, py = gx*S, gy*S
-                wd.rectangle((px-half, py-half, px+S+half-1, py+half-1), fill=WALL_COLOR)
+                wd.rectangle((px-half, py-half, px+S+half-1, py+half-1), fill=wall_color)
 
         # 床領域の外にある壁ピクセルは透明化（凹形状の切り欠きも正確）。
         from PIL import ImageChops
@@ -236,10 +236,22 @@ def p_key(p):
     return p[1], p[0]
 
 
+def hex_to_rgba(value, label):
+    """#RRGGBB形式の色指定をRGBAタプルに変換する。"""
+    value = value.strip()
+    if len(value) != 7 or not value.startswith('#'):
+        raise ValueError(f'{label}は #RRGGBB の形式で指定してください。')
+    try:
+        rgb = tuple(int(value[i:i + 2], 16) for i in (1, 3, 5))
+    except ValueError:
+        raise ValueError(f'{label}には16進数（0〜9、A〜F）を指定してください。')
+    return (*rgb, 255)
+
+
 class App:
     def __init__(self, root):
         self.root = root
-        root.title('建物マップ生成ツール Ver.4')
+        root.title('家の間取りマップ生成ツール Ver.4')
         top = ttk.Frame(root, padding=12)
         top.pack(fill='x')
         ttk.Label(top, text='横スクウェア数').pack(side='left')
@@ -253,6 +265,15 @@ class App:
         self.rect_var = tk.BooleanVar(value=False)
         ttk.Checkbutton(top, text='長方形にする', variable=self.rect_var,
                         command=self.generate).pack(side='left', padx=8)
+        colors = ttk.Frame(root, padding=(12, 0, 12, 0))
+        colors.pack(fill='x')
+        ttk.Label(colors, text='床の色').pack(side='left')
+        self.floor_hex = tk.StringVar(value='#CAA671')
+        ttk.Entry(colors, textvariable=self.floor_hex, width=9).pack(side='left', padx=(5, 14))
+        ttk.Label(colors, text='壁の色').pack(side='left')
+        self.wall_hex = tk.StringVar(value='#414144')
+        ttk.Entry(colors, textvariable=self.wall_hex, width=9).pack(side='left', padx=5)
+        ttk.Button(colors, text='色を反映', command=self.update_preview).pack(side='left', padx=8)
         self.label = ttk.Label(root)
         self.label.pack(padx=12, pady=12)
         self.grid_var = tk.BooleanVar(value=False)
@@ -279,7 +300,15 @@ class App:
         if self.generator is None:
             return
         w, h = self.generator.w, self.generator.h
-        self.im = self.generator.render(grid=self.grid_var.get())
+        try:
+            floor_color = hex_to_rgba(self.floor_hex.get(), '床の色')
+            wall_color = hex_to_rgba(self.wall_hex.get(), '壁の色')
+        except ValueError as e:
+            messagebox.showerror('色指定エラー', str(e))
+            return
+        self.im = self.generator.render(grid=self.grid_var.get(),
+                                        floor_color=floor_color,
+                                        wall_color=wall_color)
         preview = self.im.copy()
         preview.thumbnail((850, 650))
         self.photo = ImageTk.PhotoImage(preview)
