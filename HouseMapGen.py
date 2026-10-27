@@ -37,26 +37,62 @@ class Generator:
                 p, q = random.choice(candidates)
                 self.doors.add(frozenset((p, q)))
         self.entrance = (self.entry_x, 0)
+        # 基本の玄関に加え、40%以下の確率で外周に追加出入口を作る。
+        self.exits = {(self.entry_x, 0, 0, -1)}
+        if random.random() < 0.40:
+            boundary = []
+            for x, y in self.cells:
+                for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                    nx, ny = x + dx, y + dy
+                    if not (0 <= nx < self.w and 0 <= ny < self.h):
+                        candidate = (x, y, dx, dy)
+                        if candidate not in self.exits:
+                            boundary.append(candidate)
+            random.shuffle(boundary)
+            for exit_side in boundary:
+                if len(self.exits) >= random.randint(2, 3):
+                    break
+                # 追加出入口が近接しすぎないようにする。
+                x, y, dx, dy = exit_side
+                if all(abs(x - ex) + abs(y - ey) > 2 for ex, ey, _, _ in self.exits):
+                    self.exits.add(exit_side)
 
     def _neighbors(self, p):
         x, y = p
         return ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1))
 
     def _make_corridor(self):
-        # 上辺の玄関から入る幅1マスの縦廊下。途中で左右に曲がるL字型も生成。
+        """玄関から続く廊下を作り、枝道と接続路で分岐・合流を追加する。"""
         self.entry_x = random.randrange(1, self.w - 1) if self.w >= 4 else self.w // 2
         bend = random.randint(1, self.h - 2)
         corridor = {(self.entry_x, y) for y in range(bend + 1)}
         if self.w >= 4 and self.h >= 4 and random.random() < .75:
             ends = [x for x in range(1, self.w - 1) if abs(x - self.entry_x) >= 1]
             target = random.choice(ends) if ends else self.entry_x
-            corridor.update((x, bend) for x in range(min(target, self.entry_x),
-                                                      max(target, self.entry_x) + 1))
-            # ときどきもう一度曲がる（折れ曲がりのある廊下）。
+            corridor.update((x, bend) for x in range(min(target, self.entry_x), max(target, self.entry_x) + 1))
             if random.random() < .55:
                 corridor.update((target, y) for y in range(bend, self.h))
         else:
             corridor.update((self.entry_x, y) for y in range(bend, self.h))
+
+        # 既存廊下から横枝を伸ばし、別の廊下へ接続することで合流路も作る。
+        branch_count = max(1, min(8, (self.w * self.h) // 35))
+        for _ in range(branch_count):
+            anchors = list(corridor)
+            ax, ay = random.choice(anchors)
+            if self.w > 3 and random.random() < .75:
+                target_x = random.randrange(self.w)
+                lo, hi = sorted((ax, target_x))
+                corridor.update((x, ay) for x in range(lo, hi + 1))
+                # 半分程度は枝の先を縦に延ばし、既存廊下に接続してループを形成。
+                if random.random() < .55:
+                    target_y = random.randrange(self.h)
+                    lo_y, hi_y = sorted((ay, target_y))
+                    corridor.update((target_x, y) for y in range(lo_y, hi_y + 1))
+            else:
+                target_y = random.randrange(self.h)
+                lo_y, hi_y = sorted((ay, target_y))
+                corridor.update((ax, y) for y in range(lo_y, hi_y + 1))
         return corridor
 
     def _make_rooms(self):
@@ -153,6 +189,7 @@ class Generator:
         return rooms
 
     def render(self, grid=False, floor_color=FLOOR, wall_color=WALL_COLOR):
+        wall_thickness = WALL
         im = Image.new('RGBA', (self.w * S, self.h * S), (0, 0, 0, 0))
         d = ImageDraw.Draw(im)
         for x, y in self.cells:
@@ -176,7 +213,7 @@ class Generator:
                         continue
                     exterior = False
                 else:
-                    if (x, y) == self.entrance and dy == -1:
+                    if (x, y, dx, dy) in self.exits:
                         continue
                     exterior = True
                 if dx:
@@ -188,7 +225,7 @@ class Generator:
         # 外壁は外側に飛び出さないよう、最後に床マスクでクリップする。
         wall_layer = Image.new('RGBA', im.size, (0, 0, 0, 0))
         wd = ImageDraw.Draw(wall_layer)
-        half = WALL // 2
+        half = wall_thickness // 2
         for orient, gx, gy, exterior in edges:
             if orient == 'v':
                 px, py = gx*S, gy*S
@@ -251,15 +288,15 @@ def hex_to_rgba(value, label):
 class App:
     def __init__(self, root):
         self.root = root
-        root.title('家の間取りマップ生成ツール Ver.4')
+        root.title('家の間取りマップ生成ツール Ver.5')
         top = ttk.Frame(root, padding=12)
         top.pack(fill='x')
         ttk.Label(top, text='横スクウェア数').pack(side='left')
         self.w = tk.IntVar(value=6)
-        ttk.Spinbox(top, from_=3, to=30, textvariable=self.w, width=5).pack(side='left', padx=(5,16))
+        ttk.Spinbox(top, from_=3, to=99, textvariable=self.w, width=5).pack(side='left', padx=(5,16))
         ttk.Label(top, text='縦スクウェア数').pack(side='left')
         self.h = tk.IntVar(value=8)
-        ttk.Spinbox(top, from_=3, to=30, textvariable=self.h, width=5).pack(side='left', padx=(5,16))
+        ttk.Spinbox(top, from_=3, to=99, textvariable=self.h, width=5).pack(side='left', padx=(5,16))
         ttk.Button(top, text='新しく生成', command=self.generate).pack(side='left', padx=4)
         ttk.Button(top, text='PNG保存', command=self.save).pack(side='left', padx=4)
         self.rect_var = tk.BooleanVar(value=False)
@@ -288,10 +325,10 @@ class App:
     def generate(self):
         try:
             w, h = self.w.get(), self.h.get()
-            if not (3 <= w <= 30 and 3 <= h <= 30):
+            if not (3 <= w <= 99 and 3 <= h <= 99):
                 raise ValueError()
         except (ValueError, tk.TclError):
-            messagebox.showerror('入力エラー', '縦横は3〜30の整数にしてください。')
+            messagebox.showerror('入力エラー', '縦横は3〜99の整数にしてください。')
             return
         self.generator = Generator(w, h, rectangular=self.rect_var.get())
         self.update_preview()
@@ -313,7 +350,7 @@ class App:
         preview.thumbnail((850, 650))
         self.photo = ImageTk.PhotoImage(preview)
         self.label.configure(image=self.photo)
-        self.info.configure(text=f'画像サイズ：{w*S} × {h*S} px ｜ 部屋数：{len(self.generator.rooms)} ｜ RGBA透過PNG')
+        self.info.configure(text=f'画像サイズ：{self.im.width} × {self.im.height} px（1マス{S}px）｜ 部屋数：{len(self.generator.rooms)} ｜ RGBA透過PNG')
 
     def save(self):
         if self.im is None:
