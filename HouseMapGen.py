@@ -288,7 +288,7 @@ def hex_to_rgba(value, label):
 class App:
     def __init__(self, root):
         self.root = root
-        root.title('家の間取りマップ生成ツール Ver.5')
+        root.title('建物マップ生成ツール Ver.5')
         top = ttk.Frame(root, padding=12)
         top.pack(fill='x')
         ttk.Label(top, text='横スクウェア数').pack(side='left')
