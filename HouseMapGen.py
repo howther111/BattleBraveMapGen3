@@ -37,25 +37,6 @@ class Generator:
                 p, q = random.choice(candidates)
                 self.doors.add(frozenset((p, q)))
         self.entrance = (self.entry_x, 0)
-        # 基本の玄関に加え、40%以下の確率で外周に追加出入口を作る。
-        self.exits = {(self.entry_x, 0, 0, -1)}
-        if random.random() < 0.40:
-            boundary = []
-            for x, y in self.cells:
-                for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                    nx, ny = x + dx, y + dy
-                    if not (0 <= nx < self.w and 0 <= ny < self.h):
-                        candidate = (x, y, dx, dy)
-                        if candidate not in self.exits:
-                            boundary.append(candidate)
-            random.shuffle(boundary)
-            for exit_side in boundary:
-                if len(self.exits) >= random.randint(2, 3):
-                    break
-                # 追加出入口が近接しすぎないようにする。
-                x, y, dx, dy = exit_side
-                if all(abs(x - ex) + abs(y - ey) > 2 for ex, ey, _, _ in self.exits):
-                    self.exits.add(exit_side)
 
     def _neighbors(self, p):
         x, y = p
@@ -188,7 +169,7 @@ class Generator:
                     break
         return rooms
 
-    def render(self, grid=False, floor_color=FLOOR, wall_color=WALL_COLOR):
+    def render(self, grid=False, floor_color=FLOOR, wall_color=WALL_COLOR, wall_probability=98):
         wall_thickness = WALL
         im = Image.new('RGBA', (self.w * S, self.h * S), (0, 0, 0, 0))
         d = ImageDraw.Draw(im)
@@ -213,13 +194,17 @@ class Generator:
                         continue
                     exterior = False
                 else:
-                    if (x, y, dx, dy) in self.exits:
+                    # 玄関だけは必ず開口にする。その他の外周壁も、下の共通抽選で
+                    # 2%の確率で省略され、追加出入口として機能する。
+                    if (x, y) == self.entrance and dy == -1:
                         continue
                     exterior = True
-                if dx:
-                    edges.append(('v', x + (dx == 1), y, exterior))
-                else:
-                    edges.append(('h', x, y + (dy == 1), exterior))
+                # 内壁・外壁を同じルールで抽選。外周壁が省略されれば追加出入口になる。
+                if random.random() < wall_probability / 100.0:
+                    if dx:
+                        edges.append(('v', x + (dx == 1), y, exterior))
+                    else:
+                        edges.append(('h', x, y + (dy == 1), exterior))
 
         # 中心線の上下左右に壁厚の半分ずつ配置。端を延長してT字/L字を密閉。
         # 外壁は外側に飛び出さないよう、最後に床マスクでクリップする。
@@ -288,7 +273,7 @@ def hex_to_rgba(value, label):
 class App:
     def __init__(self, root):
         self.root = root
-        root.title('建物マップ生成ツール Ver.5')
+        root.title('建物マップ生成ツール Ver.6')
         top = ttk.Frame(root, padding=12)
         top.pack(fill='x')
         ttk.Label(top, text='横スクウェア数').pack(side='left')
@@ -311,6 +296,9 @@ class App:
         self.wall_hex = tk.StringVar(value='#414144')
         ttk.Entry(colors, textvariable=self.wall_hex, width=9).pack(side='left', padx=5)
         ttk.Button(colors, text='色を反映', command=self.update_preview).pack(side='left', padx=8)
+        ttk.Label(colors, text='壁の生成確率（%）').pack(side='left', padx=(12, 0))
+        self.wall_probability = tk.StringVar(value='98')
+        ttk.Entry(colors, textvariable=self.wall_probability, width=5).pack(side='left', padx=5)
         self.label = ttk.Label(root)
         self.label.pack(padx=12, pady=12)
         self.grid_var = tk.BooleanVar(value=False)
@@ -340,12 +328,16 @@ class App:
         try:
             floor_color = hex_to_rgba(self.floor_hex.get(), '床の色')
             wall_color = hex_to_rgba(self.wall_hex.get(), '壁の色')
+            probability = int(self.wall_probability.get().strip())
+            if not 0 <= probability <= 100:
+                raise ValueError('壁の生成確率は0〜100の整数で指定してください。')
         except ValueError as e:
-            messagebox.showerror('色指定エラー', str(e))
+            messagebox.showerror('入力エラー', str(e) if str(e) else '壁の生成確率は0〜100の整数で指定してください。')
             return
         self.im = self.generator.render(grid=self.grid_var.get(),
                                         floor_color=floor_color,
-                                        wall_color=wall_color)
+                                        wall_color=wall_color,
+                                        wall_probability=probability)
         preview = self.im.copy()
         preview.thumbnail((850, 650))
         self.photo = ImageTk.PhotoImage(preview)
