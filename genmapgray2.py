@@ -213,6 +213,7 @@ def genmap(csv_flg=1, highmount=0.5, forest=0.4, wood=0.3, land=-0.2,
                 canvas.paste(tile, (x * tilepixel, y * tilepixel))
 
                 outputText = outputText + "／,"
+                outputMapBigArray[y][x] = -0.5
 
             elif pery[y][x] < wood:
 
@@ -241,7 +242,7 @@ def genmap(csv_flg=1, highmount=0.5, forest=0.4, wood=0.3, land=-0.2,
                 canvas.paste(tile, (x * tilepixel, y * tilepixel))
 
                 outputText = outputText + "▽,"
-                outputMapBigArray[y][x] = 1
+                outputMapBigArray[y][x] = 0.5
 
             elif pery[y][x] < highmount:
 
