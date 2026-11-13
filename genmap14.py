@@ -218,8 +218,8 @@ def genmap(xsquare=9, ysquare=6, csv_flg=1, highmount=0.5, forest=0.4, woods=0.3
                         outputMinText = outputMinText + "　,"
                     build_num = random.randint(3,5)
                     for i in range(build_num):
-                        buildsizemin = 15
-                        buildsizemax = 45
+                        buildsizemin = 10
+                        buildsizemax = 40
                         buildposmin = buildsizemax
                         buildposmax = pixel - buildsizemax
                         buildsize = random.randint(buildsizemin, buildsizemax)
@@ -235,7 +235,7 @@ def genmap(xsquare=9, ysquare=6, csv_flg=1, highmount=0.5, forest=0.4, woods=0.3
                         outputMinText = outputMinText + "▼,"
                     elif csv_flg == 0:
                         outputMinText = outputMinText + "　,"
-                    build_num = random.randint(1, 3)
+                    build_num = random.randint(2, 4)
                     for i in range(build_num):
                         buildsizemin = 10
                         buildsizemax = 30
@@ -257,8 +257,8 @@ def genmap(xsquare=9, ysquare=6, csv_flg=1, highmount=0.5, forest=0.4, woods=0.3
                         outputMinText = outputMinText + "　,"
                     build_num = random.randint(1, 3)
                     for i in range(build_num):
-                        buildsizemin = 5
-                        buildsizemax = 15
+                        buildsizemin = 10
+                        buildsizemax = 20
                         buildposmin = buildsizemax
                         buildposmax = pixel - buildsizemax
                         buildsize = random.randint(buildsizemin, buildsizemax)
