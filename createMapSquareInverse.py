@@ -62,9 +62,9 @@ if __name__ == '__main__':
 
     # 文字描画
     num = 1
-    for y in range(yMax):
-        xPoint = (midashiSize / 2)
-        yPoint = midashiSize + (cellSize / 2) + (y * cellSize)
+    for x in range(xMax):
+        xPoint = midashiSize + (cellSize / 2) + (x * cellSize)
+        yPoint = midashiSize / 2
         alphaNum = ""
         numJyu = num // 26
         numIchi = num % 26
@@ -73,21 +73,20 @@ if __name__ == '__main__':
         elif numJyu <= 26:
             alphaNum = numToAlpha.numToAlphaOne(numJyu) + numToAlpha.numToAlphaOne(numIchi)
         else:
-            messagebox.showinfo('エラー', '縦スクウェアが上限（675）を超えています')
+            messagebox.showinfo('エラー', '横スクウェアが上限（675）を超えています')
             sys.exit()
-        # alphaNum = numToAlpha.numToAlphaOne(num)
-        w = draw.textlength(alphaNum, font=font)
-        draw.text((xPoint - (w / 2), yPoint - (w / 2) - (4 * settings.cellNum)), alphaNum, fill=settings.lineColor,
-                  font=font)
-        num = num + 1
 
-    num = 1
-    for x in range(xMax):
-        xPoint = midashiSize + (cellSize / 2) + (x * cellSize)
-        yPoint = midashiSize / 2
         w = draw.textlength("00", font=font)
         # print(w)
         # print(h)
+        draw.text((xPoint - (w / 2), yPoint - (w / 2) - (4 * settings.cellNum)), alphaNum, fill=settings.lineColor, font=font)
+        num = num + 1
+
+    num = 1
+    for y in range(yMax):
+        xPoint = (midashiSize / 2)
+        yPoint = midashiSize + (cellSize / 2) + (y * cellSize)
+        #alphaNum = numToAlpha.numToAlphaOne(num)
         draw.text((xPoint - (w / 2), yPoint - (w / 2) - (4 * settings.cellNum)), str(num), fill=settings.lineColor,
                   font=font)
         num = num + 1
